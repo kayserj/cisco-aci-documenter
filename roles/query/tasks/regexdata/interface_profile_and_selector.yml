@@ -1,0 +1,5 @@
+---
+- name: Applying {{ item.aci_query_title | regex_replace('_', ' ') | upper }} Regular Expressions
+  set_fact:
+    aci_regexd: '{{ aci_filtered | regex_replace("(uni\/|infra\/|funcprof\/|accportgrp-|accbundle-)") | regex_replace("infraAccPortGrp", "Access") | regex_replace("infraAccBaseGrp", "BaseGroup") | regex_replace("infraAccBndlGrp", "Bundle") | regex_replace("infraFexBndlGrp", "Fex") | regex_replace("fexprof-", "Fex Profile:") | regex_replace("fexbundle-", "Fex Policy Group:") }}'
+  tags: always

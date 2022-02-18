@@ -1,0 +1,7 @@
+<h3>-{{ item.aci_query_title | regex_replace('_', ' ') | upper }}-</h3>
+
+{{ item.j2_title_cells }}
+:---:{% for n in range(item.mkdtdv - 2) %}{{ mkdtd }}{% if not loop.last %}{% endif %}{% endfor %}|:---:
+{% for item in aci_regexd %}
+{{ item | join('|') | regex_replace(rf1) | regex_replace(rf2) | regex_replace(rf3) | regex_replace(', ', '<br>') }}
+{% endfor %}

@@ -1,0 +1,60 @@
+---
+# Ansible Cisco ACI Documentation Tool by James Kayser
+- hosts: localhost
+  gather_facts: false
+
+  vars:
+   msg: |
+              Playbook must run with a tag option. No tag, no data.
+              Check the readme.md file for instructions on how to install and use this script.
+              
+              Password or Signature Based Authentication
+                 ansible-playbook -i aci_hosts document-aci.yml --tags pass
+                 ansible-playbook -i aci_hosts document-aci.yml --tags sig
+
+              Optional json tag will copy the raw json response to ~/ansible_json_payload 
+                 ansible-playbook -i aci_hosts document-aci.yml --tags pass,json 
+                 ansible-playbook -i aci_hosts document-aci.yml --tags sig,json
+
+              Offline Mode tag, offline, is for standalone operation. No other tags needed
+              Must have .json files in ~/ansible_json_payload
+                 ansible-playbook -i aci_hosts document-aci.yml --tags offline
+
+  tasks:
+    - name: "Remove Existing Working Directory"
+      file:
+        path: roles/ansible_temp_dir
+        state: absent
+      tags: always
+
+    - name: "Instructions"
+      debug:
+        msg: "{{ msg.split('\n') }}"
+      tags: always             
+
+- hosts: apic
+  any_errors_fatal: false
+  roles:
+    - role: query
+
+  vars_prompt:
+
+  - name: "apic_ip"
+    prompt: "Enter your APIC IP Address"
+    private: no
+
+  - name: "user"
+    prompt: "Enter your APIC Username  Default"
+    private: no
+    unsafe: yes
+    default: 'admin'
+
+  - name: "pass"
+    prompt: "Enter your APIC Password"
+    private: yes
+    unsafe: yes
+
+  - name: "report_name"
+    prompt: "Enter the Report Name  Default"
+    private: no
+    default: 'noname-report'

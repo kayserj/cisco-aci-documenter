@@ -1,0 +1,20 @@
+---
+- name: Run Query
+  include_tasks: run-query.yml
+  tags: always
+
+- name: JSON Filtering
+  set_fact:
+    aci_filtered: '{{ aci_response | community.general.json_query(item.json_query_filter) }}'
+  tags: always
+
+- name: Calling {{ item.aci_query_title | regex_replace('_', ' ') | upper }} RegEx Task
+  include_tasks: 'roles/query/tasks/regexdata/{{ item.aci_query_title }}.yml'
+  tags: always
+
+- name: Templating "{{ item.aci_query_title | regex_replace('_', ' ') | upper }}" Markdown Table
+  template:
+    src: md_table_template.j2
+    dest: '{{ temp_dir.path }}/{{ item.task_number }}_{{ item.aci_query_title }}.md'
+  tags: always
+

@@ -1,0 +1,89 @@
+---
+- name: Generating Certificate
+  command: "openssl req -new -newkey rsa:2048 -days 36500 -nodes -x509 -keyout {{ temp_dir_parent.path }}/{{ cert_user }}.key -out {{ temp_dir_parent.path }}/{{ cert_user }}.crt -subj '/CN={{ cert_user }}/O=Nauraushaun Networks/C=US'"
+
+- name: Creating Certificate Based Authentication User {{ cert_user }}
+  cisco.aci.aci_rest:
+    host: "{{ inventory_hostname }}"
+    username: "{{ user }}"
+    password: "{{ pass }}"
+    use_ssl: yes
+    validate_certs: false
+    path: /api/mo/uni.json
+    method: post
+    content: {
+            "aaaUser": {
+              "attributes": {
+                "accountStatus": "active",
+                "clearPwdHistory": "yes",
+                "dn": "uni/userext/user-{{ cert_user }}",
+                "expiration": "never",
+                "expires": "no",
+                "name": "{{ cert_user }}",
+                "pwdLifeTime": "no-password-expire",
+                "status": "created,modified",
+                "pwd": "{{ pass }}"
+              },
+              "children": [
+                {
+                  "aaaUserDomain": {
+                    "attributes": {
+                      "annotation": "",
+                      "childAction": "",
+                      "descr": "",
+                      "name": "all",
+                      "nameAlias": "",
+                      "ownerKey": "",
+                      "ownerTag": "",
+                      "rn": "userdomain-all",
+                      "status": "created,modified"
+                    },
+                    "children": [
+                      {
+                        "aaaUserRole": {
+                          "attributes": {
+                            "annotation": "",
+                            "childAction": "",
+                            "descr": "",
+                            "name": "read-all",
+                            "nameAlias": "",
+                            "ownerKey": "",
+                            "ownerTag": "",
+                            "privType": "readPriv",
+                            "rn": "role-read-all",
+                            "status": "created,modified"
+                          }
+                        }
+                      },
+                      {
+                        "aaaUserRole": {
+                          "attributes": {
+                            "annotation": "",
+                            "descr": "",
+                            "name": "admin",
+                            "nameAlias": "",
+                            "ownerKey": "",
+                            "ownerTag": "",
+                            "privType": "writePriv",
+                            "rn": "role-admin",
+                            "status": "created,modified"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+
+- name: Installing Certificate For {{ cert_user }}
+  cisco.aci.aci_aaa_user_certificate:
+    host: "{{ inventory_hostname }}"
+    username: "{{ user }}"
+    password: "{{ pass }}"
+    use_ssl: yes
+    validate_certs: false
+    aaa_user: "{{ cert_user }}"
+    name: "{{ cert_user }}"
+    certificate: "{{ lookup('file', '{{ temp_dir_parent.path }}/{{ cert_user }}.crt') }}"

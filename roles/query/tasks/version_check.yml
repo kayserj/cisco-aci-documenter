@@ -1,0 +1,35 @@
+---
+- name: Checking APIC Firmware Version
+  cisco.aci.aci_rest:
+    host: "{{ inventory_hostname }}"
+    username: "{{ user }}"
+    password: "{{ pass }}"
+    use_ssl: yes
+    validate_certs: false
+    path: '/api/node/class/firmwareCtrlrFwStatusCont.json?query-target=subtree&target-subtree-class=firmwareCtrlrRunning'
+    method: get
+  register: aci_response
+  tags: pass,sig
+
+- name: Setting APIC Version Control
+  set_fact:
+    aci_version: "{{ aci_response | community.general.json_query('imdata[*].firmwareCtrlrRunning.attributes.version') }}"
+  tags: pass,sig
+
+- name: Checking For 5.x Files
+  stat: 
+    path: '{{ payload_dir }}/endpoint_security_group.json'
+  register: esg_json_file
+  tags: offline
+
+- name: Setting APIC Version Control
+  set_fact:
+    aci_version: '5.2'
+  when: esg_json_file.stat.exists
+  tags: offline
+
+- name: Setting APIC Version Control
+  set_fact:
+    aci_version: '4.2'
+  when: not esg_json_file.stat.exists
+  tags: offline

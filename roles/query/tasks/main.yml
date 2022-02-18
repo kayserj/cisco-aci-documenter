@@ -1,0 +1,22 @@
+---
+- name: Pre-processing
+  include_tasks: pre-processing.yml
+  tags: always
+
+- name: Templating Tasks
+  include_tasks: templating_tasks.yml
+  tags: always
+
+- name: Reports Creation
+  include_tasks: reports.yml
+  tags: always
+
+- name: Garbage Collection
+  include_tasks: trash.yml
+  tags: always
+
+- name: Documentation Complete
+  debug:
+    msg: "Check your home directory for the generated files"
+  tags: always
+

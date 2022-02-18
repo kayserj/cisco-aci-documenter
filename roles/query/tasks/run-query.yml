@@ -1,0 +1,36 @@
+---
+- name: Query '{{ item.aci_query_title | regex_replace('_', ' ') | upper }}'
+  cisco.aci.aci_rest:
+    host: "{{ inventory_hostname }}"
+    username: "{{ user }}"
+    password: "{{ pass }}"
+    use_ssl: yes
+    validate_certs: false
+    path: "{{ item.api_query_target }}"
+    method: get
+  register: aci_response
+  tags: pass
+
+- name: Query '{{ item.aci_query_title | regex_replace('_', ' ') | upper }}'
+  cisco.aci.aci_rest:
+    host: "{{ inventory_hostname }}"
+    username: "{{ cert_user }}"
+    private_key: "{{ temp_dir_parent.path }}/{{ cert_user }}.key"
+    certificate_name: "{{ cert_user }}" 
+    use_ssl: yes
+    validate_certs: false
+    path: "{{ item.api_query_target }}"
+    method: get
+  register: aci_response
+  tags: sig
+
+- name: Looking up '{{ item.aci_query_title | regex_replace('_', ' ') | upper }}' JSON payload
+  set_fact:
+    aci_response: '{{ lookup("file", "{{ payload_dir }}/{{ item.aci_query_title }}.json") }}'
+  tags: offline
+
+- name: Copy '{{ item.aci_query_title | regex_replace('_', ' ') | upper }}' Response to Disk
+  copy: 
+    content: '{{ aci_response }}' 
+    dest: '{{ payload_dir.path }}/{{ item.aci_query_title }}.json'
+  tags: json

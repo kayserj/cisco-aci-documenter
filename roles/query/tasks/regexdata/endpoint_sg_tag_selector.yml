@@ -1,0 +1,5 @@
+---
+- name: Applying {{ item.aci_query_title | regex_replace('_', ' ') | upper }} Regular Expressions
+  set_fact:
+    aci_regexd: '{{ aci_filtered | regex_replace("(uni\/|tn-)") | regex_replace("(\/ap-|\/esg-|\/tagselectorkey-\[|\]-value-\[)", "|") }}'
+  tags: always

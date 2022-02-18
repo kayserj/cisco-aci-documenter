@@ -1,0 +1,36 @@
+---
+- name: Making Parent Temp Directory
+  file:
+    path: roles/ansible_temp_dir
+    state: directory
+    mode: '0755'
+  register: temp_dir_parent
+  tags: always
+
+- name: Making Markdown Temp Directory
+  file:
+    path: roles/ansible_temp_dir/markdownfiles
+    state: directory
+    mode: '0755'
+  register: temp_dir
+  tags: always
+
+- name: Making JSON Payload Directory
+  file:
+    path: ~/ansible_json_payload
+    state: directory
+    mode: '0755'
+  register: payload_dir
+  tags: json
+
+- name: APIC Version Check
+  include_tasks: version_check.yml
+  tags: always
+
+- name: Importing Certificate Based Authentication Tasks
+  include_tasks: 
+    file: user-generation.yml
+    apply:
+      tags: sig
+  tags: sig
+

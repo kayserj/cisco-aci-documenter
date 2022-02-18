@@ -1,0 +1,24 @@
+---
+- name: Table Creation Tasks
+  include_tasks: create_table.yml
+  loop: '{{ primary_vars }}'
+  loop_control:
+    label: '{{ item.aci_query_title }}'
+  tags: always
+
+- name: Table Creation Tasks
+  include_tasks: create_table.yml
+  loop: '{{ secondary_vars }}'
+  loop_control:
+    label: '{{ item.aci_query_title }}'
+  when: aci_version is search('5\.')
+  tags: always
+
+- name: Templating Group Headers
+  template:
+    src: md_grpheader_template.j2
+    dest: '{{ temp_dir.path }}/{{ item.grp_number }}_grpheader.md'
+  loop: '{{ group_header_facts }}'
+  loop_control:
+    label: '{{ item.grp_title }}'
+  tags: always

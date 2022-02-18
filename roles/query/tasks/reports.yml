@@ -1,0 +1,27 @@
+---
+- name: Setting Theme Color
+  set_fact:
+    css_th_color: '#6495ed'
+  tags: jb
+
+- name: Setting Theme Logo
+  set_fact:
+    logo_header_img: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/j//z8ABf4C/qc1gYQAAAAASUVORK5CYII='
+  tags: jb
+
+- name: Merging Markdown Files
+  assemble:
+    src: '{{ temp_dir.path }}'
+    dest: '{{ temp_dir.path }}/{{ report_name }}.md'
+    delimiter: '<br>\n'
+  tags: always
+
+- name: Templating CSS File
+  template:
+    src: header.j2
+    dest: '{{ temp_dir.path }}/header.html'
+  tags: always
+
+- name: HTML Generation
+  shell:  'pandoc -s {{ temp_dir.path }}/{{ report_name }}.md -H {{ temp_dir.path }}/header.html -o ~/{{ report_name }}_{{ ansible_date_time.date }}-{{ ansible_date_time.time }}.html -M document-css=false'
+  tags: always

@@ -1,0 +1,17 @@
+---
+# THIS IS AN UNUSED YML FILE FOR DEVELOPMENT AND TESTING PURPOSES #
+# - name: Templating {{ item.grp_title | regex_replace('_', ' ') | upper }} Markdown Variable
+#   set_fact:
+#     '_{{ item.grp_number }}_{{ item.grp_title }}': '{{ lookup("template", "md_grpheader_template.j2") }}'
+#   tags: always
+
+# - name: Adding {{ item.grp_title | regex_replace('_', ' ') | upper }} To Variable List
+#   set_fact:
+#     aci_var_list: '{{ aci_var_list + [ "_" + item.grp_number + "_" + item.grp_title ] | sort }}'
+#   tags: always
+  
+# - name: Templating Group Headers
+#   template:
+#     src: md_grpheader_template.j2
+#     dest: '{{ temp_dir.path }}/{{ item.grp_number }}_grpheader.md'
+#   tags: always

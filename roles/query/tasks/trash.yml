@@ -1,0 +1,32 @@
+---
+- name: Removing Certificate Based Authentication User
+  cisco.aci.aci_rest:
+    host: "{{ inventory_hostname }}"
+    username: "{{ user }}"
+    password: "{{ pass }}"
+    use_ssl: yes
+    validate_certs: false
+    path: /api/mo/uni.json
+    method: post
+    content: {
+            "aaaUser": {
+              "attributes": {
+                "accountStatus": "active",
+                "clearPwdHistory": "yes",
+                "dn": "uni/userext/user-{{ cert_user }}",
+                "expiration": "never",
+                "expires": "no",
+                "name": "{{ cert_user }}",
+                "pwdLifeTime": "no-password-expire",
+                "status": "deleted",
+                "pwd": "{{ pass }}"
+              }
+          }
+      }
+  tags: sig
+
+- name: "Removing Working Directory"
+  file:
+    path: '{{ temp_dir_parent.path }}'
+    state: absent
+  tags: always

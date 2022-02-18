@@ -1,0 +1,95 @@
+<style>
+@charset "utf-8";
+ /* The navigation bar */
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  width: 100%; /* Full width */
+}
+
+/* Links inside the navbar */
+.navbar a {
+  float: left;
+  display: block;
+  color: {{ css_th_color }};
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change background on mouse-over */
+.navbar a:hover {
+  background: #ddd;
+  color: black;
+}
+
+/* Main content */
+.main {
+  margin-top: 40px; /* Add a top margin to avoid content overlay */
+}
+
+h1, h2, h3, h4, h5, h6, p, a, ul, ol, li, small {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+}
+
+body {
+  margin: auto;
+  padding-right: 1em;
+  padding-left: 1em;
+  max-width: auto;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  color: black;
+  font-family: Verdana, sans-serif;
+  font-size: 70%;
+  line-height: 140%;
+  color: #333;
+}
+
+/* Make the nav take up the whole body width, and give it some top and bottom margin space */
+
+td {
+   border-collapse: collapse;
+   border: 1px solid grey;
+   width: auto;
+   padding-right: 1em;
+   padding-left: 1em;
+ }
+
+th {
+   background-color: {{ css_th_color }};
+   border: 1px solid grey;
+   width: auto;
+   padding-right: 1em;
+   padding-left: 1em;
+ }
+
+tr:nth-child(odd) {
+   background-color:  #f2f2f2;)
+}
+tr:hover {
+   background-color: #ddd;
+}
+</style>
+ <div class="navbar">
+  <a href="#home">Home</a>
+  <a href="#fabric_pod_policies">Pod Policies</a>
+  <a href="#fabric_access_policies">Access Policies</a>
+  <a href="#fabric_tenant_policies">Tenant Policies</a>
+  <a href="#l3_policies">L3 Policies</a>
+  <a href="#virtual_machine_manager_policies">VMM Policies</a>
+  <a href="#admin">Admin Policies</a>
+  <a href="#multipod">Multipod Policies</a>
+  <a href="#hardware_and_health">Hardware and Health</a>
+</div>
+<div class="main">
+ <a id="home"></a>
+ <img src="data:image/png;base64,{{ logo_header_img }}" alt="header_logo"/>
+</div>
+

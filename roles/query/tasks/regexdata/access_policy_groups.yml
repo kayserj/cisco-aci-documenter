@@ -1,0 +1,5 @@
+---
+- name: Applying {{ item.aci_query_title | regex_replace('_', ' ') | upper }} Regular Expressions
+  set_fact:
+    aci_regexd: '{{ aci_filtered | regex_replace("(uni\/|infra\/|funcprof\/|accportgrp-|accbundle-|accportprof-|attentp-|lacplagp-|cdpIfP-|lldpIfP-|hintfpol-|ifPol-|stormctrlifp-|l2IfP-|coppifpol-)") | regex_replace("(\/hports-|-typ-)", ":") | regex_replace("fexprof-", "Fex Profile -> ") }}'
+  tags: always

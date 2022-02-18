@@ -1,0 +1,5 @@
+---
+- name: Applying {{ item.aci_query_title | regex_replace('_', ' ') | upper }} Regular Expressions
+  set_fact:
+    aci_regexd: '{{ aci_filtered | regex_replace("(topology\/pod-|uni\/tn-)") | regex_replace("(\/node-|\/epg-|\/cep-)", "|") | regex_replace("(\/pathgrp-|\/paths-|\/pathep-|\/protpaths-)", ":") | regex_replace("\/ap-", "|AP:") | regex_replace("\/ctx-", "|VRF:") | regex_replace("\/LDevInst-", "|LDevInst:") | regex_replace("\/lDevVip-", "|lDevVip:") }}'
+  tags: always
