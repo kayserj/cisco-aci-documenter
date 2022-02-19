@@ -1,5 +1,7 @@
 # Cisco ACI Documenter
 
+![Image of Output](https://github.com/kayserj/project-images/blob/master/documenter.png)
+
 The cisco-aci-documenter is a collective of ansible tasks that will request the configuration, status, and policy mappings of an ACI fabric, and put it into an HTML report.  Features and abilities include...
 
 * Generate an HTML report based on ACI Fabric queries.  
